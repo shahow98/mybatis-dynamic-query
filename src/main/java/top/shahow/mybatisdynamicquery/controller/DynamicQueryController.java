@@ -28,11 +28,11 @@ public class DynamicQueryController {
     @ExceptionHandler({MethodArgumentNotValidException.class})
     public CommonResponse<Object> validationHandler(MethodArgumentNotValidException validationException) {
         return CommonResponse
-                .fail("参数校验异常: " + validationException.getBindingResult().getFieldError().getDefaultMessage());
+                .fail("validation exception: " + validationException.getBindingResult().getFieldError().getDefaultMessage());
     }
 
     @ExceptionHandler(Exception.class)
     public CommonResponse<Object> exceptionHandler(Exception exception) {
-        return CommonResponse.fail("查询异常: " + exception.getMessage());
+        return CommonResponse.fail("sql query exception: " + exception.getMessage());
     }
 }

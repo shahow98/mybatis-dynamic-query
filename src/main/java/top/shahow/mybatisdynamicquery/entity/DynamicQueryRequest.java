@@ -12,8 +12,8 @@ import java.util.Map;
  */
 @Data
 public class DynamicQueryRequest {
-    @NotNull(message = "id不能为空")
+    @NotNull(message = "id is not null!")
     private Long id;
 
-    private Map<String, @NotNull(message = "参数值不能为空") String> params;
+    private Map<String, @NotNull(message = "params is not null") String> params;
 }

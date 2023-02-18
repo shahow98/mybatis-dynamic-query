@@ -8,11 +8,19 @@ import lombok.Data;
  */
 @Data
 public class DynamicQueryConfig {
-    public static final Integer COLLECTION = 1;
+    public interface ResultType {
+        Integer COLLECTION = 1;
 
-    public static final String MOCK = "0SM";
+        Integer OBJECT = 0;
+    }
 
-    public static final String USING = "0SA";
+    public interface StatusType {
+        String MOCK = "MOCK";
+
+        String USING = "USING";
+
+        String STOP = "STOP";
+    }
 
     private Long id;
     /**
@@ -28,7 +36,7 @@ public class DynamicQueryConfig {
      */
     private Integer collection;
     /**
-     * 状态;0SA/0SX/0SM(在用/停用/模拟)
+     * 状态;USING/STOP/MOCK(在用/停用/模拟)
      */
     private String status;
     /**

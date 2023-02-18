@@ -2,10 +2,8 @@ package top.shahow.mybatisdynamicquery.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import top.shahow.mybatisdynamicquery.config.DynamicQuerySystemParamsFactory;
 import top.shahow.mybatisdynamicquery.entity.DynamicQueryConfig;
 import top.shahow.mybatisdynamicquery.entity.DynamicQueryRequest;
 import top.shahow.mybatisdynamicquery.mapper.DynamicQueryMapper;
@@ -14,7 +12,6 @@ import top.shahow.mybatisdynamicquery.utils.ObjectMapperUtils;
 import java.io.IOException;
 import java.util.*;
 import java.util.function.Function;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 /**
@@ -35,7 +32,7 @@ public class DynamicQueryService {
 
     private List<Map<String, Object>> queryDB(DynamicQueryConfig config, DynamicQueryRequest request,
                                               Function<DynamicQueryConfig, List<Map<String, Object>>> nextQueryFunction) {
-        if (DynamicQueryConfig.USING.equals(config.getStatus())) {
+        if (DynamicQueryConfig.StatusType.USING.equals(config.getStatus())) {
             return dynamicQueryMapper.dynamicSelect(
                     Optional.ofNullable(querySql(config)).orElseThrow(() -> new NullPointerException("The sql is null!")),
                     queryParams(config, request));
@@ -44,7 +41,7 @@ public class DynamicQueryService {
     }
 
     private List<Map<String, Object>> queryMock(DynamicQueryConfig config) {
-        if (DynamicQueryConfig.MOCK.equals(config.getStatus())) {
+        if (DynamicQueryConfig.StatusType.MOCK.equals(config.getStatus())) {
             try {
                 return ObjectMapperUtils.from(config.getQueryMock(), new TypeReference<>() {
                 });
@@ -55,7 +52,7 @@ public class DynamicQueryService {
     }
 
     private Object queryOne(DynamicQueryConfig config, List<Map<String, Object>> result) {
-        if (DynamicQueryConfig.COLLECTION.equals(config.getCollection())) {
+        if (DynamicQueryConfig.ResultType.COLLECTION.equals(config.getCollection())) {
             return Optional.ofNullable(result).orElse(Collections.emptyList());
         } else {
             return Optional.ofNullable(result).filter(item -> !item.isEmpty()).map(item -> item.get(0)).orElse(null);
